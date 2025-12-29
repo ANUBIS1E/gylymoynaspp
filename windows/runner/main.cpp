@@ -32,10 +32,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   }
   window.SetQuitOnClose(true);
 
-  // Развернуть окно на весь экран при запуске
+  // Полноэкранный режим (убираем title bar и borders)
   HWND hwnd = window.GetHandle();
   if (hwnd != nullptr) {
-    ShowWindow(hwnd, SW_MAXIMIZE);
+    // Получаем размеры экрана
+    MONITORINFO mi = { sizeof(mi) };
+    if (GetMonitorInfo(MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY), &mi)) {
+      // Убираем границы и title bar
+      SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+
+      // Растягиваем на весь экран
+      SetWindowPos(hwnd, HWND_TOP,
+                   mi.rcMonitor.left, mi.rcMonitor.top,
+                   mi.rcMonitor.right - mi.rcMonitor.left,
+                   mi.rcMonitor.bottom - mi.rcMonitor.top,
+                   SWP_FRAMECHANGED);
+    }
   }
 
   ::MSG msg;

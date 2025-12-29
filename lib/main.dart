@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'screens/splash_screen.dart';   // Правильный импорт
 import 'screens/main_menu_screen.dart'; // Правильный импорт
 import 'screens/training_screen_new.dart'; // Импорт экрана Training
+import 'utils/brightness_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +18,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final accentColor = Colors.amber.shade700; // Золотистый
     final darkBg = Colors.blueGrey.shade800; // Фон из редизайна
+    final brightnessProvider = BrightnessProvider();
 
-    return MaterialApp(
-      title: 'Gylym Oyna',
-      debugShowCheckedModeBanner: false,
+    return AnimatedBuilder(
+      animation: brightnessProvider,
+      builder: (context, child) {
+        return ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            Colors.black.withValues(alpha: 1.0 - brightnessProvider.brightness),
+            BlendMode.srcOver,
+          ),
+          child: child!,
+        );
+      },
+      child: MaterialApp(
+        title: 'Gylym Oyna',
+        debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: accentColor,
@@ -109,12 +122,13 @@ class MyApp extends StatelessWidget {
         )
       ),
       
-      initialRoute: '/',
-      routes: {
-        '/': (context) => SplashScreen(),
-        '/home': (context) => MainMenuScreen(),
-        '/training': (context) => TrainingScreenNew(), // Добавили маршрут
-      },
+        initialRoute: '/',
+        routes: {
+          '/': (context) => SplashScreen(),
+          '/home': (context) => MainMenuScreen(),
+          '/training': (context) => TrainingScreenNew(), // Добавили маршрут
+        },
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ class AppLocalizations {
     // Main Menu
     'language': 'Язык',
     'training': 'Обучение',
+    'brightness': 'Яркость',
     'selectLanguage': 'Выберите язык',
     'chess': 'Шахматы',
     'checkers': 'Шашки',

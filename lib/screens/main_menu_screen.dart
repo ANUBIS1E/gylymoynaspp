@@ -1,8 +1,10 @@
+import 'dart:io' show Platform, exit;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/game_card.dart';
 import '../utils/training_mode_provider.dart';
+import '../utils/brightness_provider.dart';
 
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({Key? key}) : super(key: key);
@@ -29,7 +31,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             child: Text(AppLocalizations.get('no')),
           ),
           TextButton(
-            onPressed: () => SystemNavigator.pop(),
+            onPressed: () {
+              // Для Desktop платформ используем exit(0)
+              if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+                exit(0);
+              } else {
+                SystemNavigator.pop();
+              }
+            },
             child: Text(AppLocalizations.get('yes')),
           ),
         ],
@@ -121,6 +130,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ],
             ),
           );
+        } else if (textKey == 'brightness') {
+          // Показываем диалог настройки яркости
+          showDialog(
+            context: context,
+            builder: (context) => _BrightnessDialog(),
+          );
         } else if (textKey == 'exit') {
           _showExitDialog();
         }
@@ -188,6 +203,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     _buildStyledButton('language', Icons.language),
                     // Вы можете добавить сюда Text('GYLYM OYNA', ...), если хотите
                     Spacer(), // Пустое пространство
+                    _buildStyledButton('brightness', Icons.brightness_6),
                   ],
                 ),
               ),
@@ -244,6 +260,88 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Диалог настройки яркости
+class _BrightnessDialog extends StatefulWidget {
+  @override
+  _BrightnessDialogState createState() => _BrightnessDialogState();
+}
+
+class _BrightnessDialogState extends State<_BrightnessDialog> {
+  final _brightnessProvider = BrightnessProvider();
+  late double _currentBrightness;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentBrightness = _brightnessProvider.brightness;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Row(
+        children: [
+          Icon(Icons.brightness_6, color: Colors.amber),
+          SizedBox(width: 10),
+          Text('Яркость'),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Регулируйте яркость приложения',
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+          ),
+          SizedBox(height: 20),
+          Row(
+            children: [
+              Icon(Icons.brightness_low),
+              Expanded(
+                child: Slider(
+                  value: _currentBrightness,
+                  min: 0.3,
+                  max: 1.0,
+                  divisions: 7,
+                  label: '${(_currentBrightness * 100).round()}%',
+                  onChanged: (value) {
+                    setState(() {
+                      _currentBrightness = value;
+                      _brightnessProvider.setBrightness(value);
+                    });
+                  },
+                ),
+              ),
+              Icon(Icons.brightness_high),
+            ],
+          ),
+          SizedBox(height: 10),
+          Text(
+            '${(_currentBrightness * 100).round()}%',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Сбросить на 100%
+            setState(() {
+              _currentBrightness = 1.0;
+              _brightnessProvider.setBrightness(1.0);
+            });
+          },
+          child: Text('Сбросить'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Готово'),
+        ),
+      ],
     );
   }
 }

@@ -258,11 +258,26 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget>
 
     if (!mounted || widget.game.game.game_over) return;
 
+    // Проверяем что есть доступные ходы
+    final availableMoves = widget.game.game.moves();
+    if (availableMoves.isEmpty) return;
+
     // Используем Stockfish если доступен, иначе резервный AI
     String? aiMoveSAN;
     if (_useStockfish && _stockfishAI != null) {
-      aiMoveSAN = await _stockfishAI!.findBestMove(widget.game, _getAiDifficulty());
-    } else if (_fallbackAI != null) {
+      try {
+        aiMoveSAN = await _stockfishAI!.findBestMove(widget.game, _getAiDifficulty()).timeout(
+          Duration(seconds: 5),
+          onTimeout: () => null,
+        );
+      } catch (e) {
+        print('⚠ Stockfish ошибка в AI ходе: $e');
+        aiMoveSAN = null;
+      }
+    }
+
+    // Fallback на резервный AI если Stockfish не сработал
+    if (aiMoveSAN == null && _fallbackAI != null) {
       aiMoveSAN = _fallbackAI!.findBestMove(widget.game, _getAiDifficulty());
     }
 
@@ -314,12 +329,37 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget>
     });
 
     try {
+      // Проверяем что есть доступные ходы
+      final availableMoves = widget.game.game.moves();
+      if (availableMoves.isEmpty) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Нет доступных ходов')),
+          );
+        }
+        return;
+      }
+
       String? bestMove;
 
       // Используем Stockfish если доступен, иначе резервный AI
       if (_useStockfish && _stockfishAI != null) {
-        bestMove = await _stockfishAI!.findBestMove(widget.game, _getAiDifficulty());
-      } else if (_fallbackAI != null) {
+        try {
+          bestMove = await _stockfishAI!.findBestMove(widget.game, _getAiDifficulty()).timeout(
+            Duration(seconds: 5),
+            onTimeout: () {
+              print('⚠ Stockfish timeout, используем резервный AI');
+              return null;
+            },
+          );
+        } catch (e) {
+          print('⚠ Stockfish ошибка: $e, используем резервный AI');
+          bestMove = null;
+        }
+      }
+
+      // Fallback на резервный AI если Stockfish не сработал
+      if (bestMove == null && _fallbackAI != null) {
         bestMove = _fallbackAI!.findBestMove(widget.game, _getAiDifficulty());
       }
 
