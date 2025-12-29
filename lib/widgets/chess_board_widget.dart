@@ -356,14 +356,29 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget>
             title: 'Рекомендация AI',
             explanation: explanation,
             moveSuggestion: HintSystem.formatChessMove(bestMove),
-            onApplyHint: () {
+            onApplyHint: () async {
+              // Анимируем ход
+              final from = moveDetails['from'] as String;
+              final to = moveDetails['to'] as String;
+              await _animateMove(from, to);
+
+              // Делаем ход
               widget.game.makeMoveSAN(bestMove!);
               widget.onMove();
+
               setState(() {
                 _hintMoveFrom = null;
                 _hintMoveTo = null;
                 _currentHintText = null;
               });
+
+              // Проверяем конец игры
+              _checkEndGame();
+
+              // ВАЖНО: Если режим PvE, запускаем ход AI
+              if (widget.gameMode == GameMode.pve && !widget.game.game.game_over) {
+                _triggerAiMove();
+              }
             },
           );
         }

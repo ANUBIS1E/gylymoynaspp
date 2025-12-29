@@ -194,29 +194,31 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
               // --- Сетка с играми ---
               Expanded(
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxGridWidth),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: GridView.count(
-                          crossAxisCount: crossAxisCount,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          mainAxisSpacing: 25,
-                          crossAxisSpacing: 25,
-                          childAspectRatio: cardAspectRatio,
-                          children: [
-                            // Передаем правильные ключи
-                            GameCard(
-                              gameKey: 'chess',
-                              iconData: Icons.shield_moon_outlined,
-                            ),
-                            GameCard(gameKey: 'checkers', iconData: Icons.circle),
-                            GameCard(gameKey: 'togyz', iconData: Icons.grain),
-                            GameCard(gameKey: 'backgammon', iconData: Icons.casino),
-                          ],
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxGridWidth),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+                          child: GridView.count(
+                            crossAxisCount: crossAxisCount,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            mainAxisSpacing: 25,
+                            crossAxisSpacing: 25,
+                            childAspectRatio: cardAspectRatio,
+                            children: [
+                              // Передаем правильные ключи
+                              GameCard(
+                                gameKey: 'chess',
+                                iconData: Icons.shield_moon_outlined,
+                              ),
+                              GameCard(gameKey: 'checkers', iconData: Icons.circle),
+                              GameCard(gameKey: 'togyz', iconData: Icons.grain),
+                              GameCard(gameKey: 'backgammon', iconData: Icons.casino),
+                            ],
+                          ),
                         ),
                       ),
                     ),

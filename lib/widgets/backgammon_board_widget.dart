@@ -587,6 +587,11 @@ class _BackgammonBoardWidgetState extends State<BackgammonBoardWidget> with Tick
             if (widget.game.winner != null && widget.onGameEnd != null) {
               widget.onGameEnd!(widget.game.winner!);
             }
+
+            // ВАЖНО: Если режим PvE и игра не закончена, запускаем ход AI
+            if (widget.gameMode == GameMode.pve && widget.game.winner == null) {
+              _triggerAiMove();
+            }
           },
         );
       } else if (mounted) {

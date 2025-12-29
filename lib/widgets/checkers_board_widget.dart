@@ -307,6 +307,11 @@ class _CheckersBoardWidgetState extends State<CheckersBoardWidget>
             });
             widget.onMove();
             _checkEndGame();
+
+            // ВАЖНО: Если режим PvE и игра не закончена, запускаем ход AI
+            if (widget.gameMode == GameMode.pve && widget.game.checkWinner() == null) {
+              _triggerAiMove();
+            }
           },
         );
       }

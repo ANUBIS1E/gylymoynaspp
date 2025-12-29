@@ -4,14 +4,23 @@ import 'chess_logic.dart';
 
 /// Профессиональный шахматный ИИ на основе Stockfish (кроссплатформенный)
 /// Поддерживает Android, iOS, macOS, Windows, Linux
+/// СИНГЛТОН - только один инстанс на всё приложение
 class ChessAIStockfishNew {
+  // Singleton pattern
+  static final ChessAIStockfishNew _instance = ChessAIStockfishNew._internal();
+  factory ChessAIStockfishNew() => _instance;
+  ChessAIStockfishNew._internal();
+
   late Stockfish _stockfish;
   bool _isInitialized = false;
   StreamSubscription? _subscription;
 
   /// Инициализация Stockfish движка
   Future<void> initialize() async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      print('✓ Stockfish уже инициализирован (singleton)');
+      return;
+    }
 
     try {
       _stockfish = Stockfish();
