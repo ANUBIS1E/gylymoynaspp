@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   chess: ^0.7.0
   audioplayers: ^5.2.1 # Или последняя версия
-  stockfish_chess_engine: ^0.8.2 # Кроссплатформенный Stockfish (Android, iOS, macOS, Windows, Linux)
+  stockfish_chess_engine: ^0.6.0 # Кроссплатформенный Stockfish (Android, iOS, macOS, Windows, Linux)
 
 dev_dependencies:
   flutter_test:

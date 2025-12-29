@@ -232,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: a7967e31b703831a893bbc3c3dd11db08126fe5f369b5c648a36f821979f5be3
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.2"
   matcher:
     dependency: transitive
     description:
@@ -361,10 +369,10 @@ packages:
     dependency: "direct main"
     description:
       name: stockfish_chess_engine
-      sha256: "9349400ad696900b731c40d50c8459475f6739c07da0018a948de79f3c1d5b9d"
+      sha256: "166bf6661618d5cf06513a404c9e69921a8ef69e0eec1dd2b71db603fab594f0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.2"
+    version: "0.6.0"
   stream_channel:
     dependency: transitive
     description:
