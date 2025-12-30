@@ -84,21 +84,23 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
               ),
               const SizedBox(height: 20),
               SegmentedButton<GameMode>(
-                segments: [
+                segments: const [
                   ButtonSegment(
                     value: GameMode.pvp,
-                    label: Text(AppLocalizations.get('playerVsPlayer')),
+                    label: Text('Игрок vs Игрок'),
                   ),
                   ButtonSegment(
                     value: GameMode.pve,
-                    label: Text(AppLocalizations.get('playerVsAi')),
+                    label: Text('Игрок vs AI'),
                   ),
                 ],
                 selected: {_selectedMode},
                 onSelectionChanged: (Set<GameMode> newSelection) {
-                  setState(() {
-                    _selectedMode = newSelection.first;
-                  });
+                  if (newSelection.first != _selectedMode) {
+                    setState(() {
+                      _selectedMode = newSelection.first;
+                    });
+                  }
                 },
               ),
 
@@ -232,53 +234,63 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
                 alignment: WrapAlignment.center,
                 children: [
                   ChoiceChip(
+                    key: ValueKey('noTimer'),
                     label: Text(AppLocalizations.get('noTimer')),
                     selected: _selectedDuration == GameDuration.noTimer,
                     onSelected: (selected) {
-                      if (selected)
+                      if (selected && _selectedDuration != GameDuration.noTimer) {
                         setState(() {
                           _selectedDuration = GameDuration.noTimer;
                         });
+                      }
                     },
                   ),
                   ChoiceChip(
+                    key: ValueKey('min3'),
                     label: Text('3 ${AppLocalizations.get('minutes')}'),
                     selected: _selectedDuration == GameDuration.min3,
                     onSelected: (selected) {
-                      if (selected)
+                      if (selected && _selectedDuration != GameDuration.min3) {
                         setState(() {
                           _selectedDuration = GameDuration.min3;
                         });
+                      }
                     },
                   ),
                   ChoiceChip(
+                    key: ValueKey('min5'),
                     label: Text('5 ${AppLocalizations.get('minutes')}'),
                     selected: _selectedDuration == GameDuration.min5,
                     onSelected: (selected) {
-                      if (selected)
+                      if (selected && _selectedDuration != GameDuration.min5) {
                         setState(() {
                           _selectedDuration = GameDuration.min5;
                         });
+                      }
                     },
                   ),
                   ChoiceChip(
+                    key: ValueKey('min10'),
                     label: Text('10 ${AppLocalizations.get('minutes')}'),
                     selected: _selectedDuration == GameDuration.min10,
                     onSelected: (selected) {
-                      if (selected)
+                      if (selected && _selectedDuration != GameDuration.min10) {
                         setState(() {
                           _selectedDuration = GameDuration.min10;
                         });
+                      }
                     },
                   ),
                   ChoiceChip(
+                    key: ValueKey('min15'),
                     label: Text('15 ${AppLocalizations.get('minutes')}'),
                     selected: _selectedDuration == GameDuration.min15,
                     onSelected: (selected) {
-                      if (selected)
+                      if (selected && _selectedDuration != GameDuration.min15) {
                         setState(() {
                           _selectedDuration = GameDuration.min15;
                         });
+                      }
                     },
                   ),
                 ],
