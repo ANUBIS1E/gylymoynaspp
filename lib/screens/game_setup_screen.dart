@@ -221,79 +221,90 @@ class _GameSetupScreenState extends State<GameSetupScreen> {
 
               // --- Select Timer Duration ---
               const SizedBox(height: 40),
-              Text(
-                AppLocalizations.get('selectTime'),
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineMedium?.copyWith(fontSize: 32),
-              ),
-              const SizedBox(height: 20),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: [
-                  ChoiceChip(
-                    key: ValueKey('noTimer'),
-                    label: Text(AppLocalizations.get('noTimer')),
-                    selected: _selectedDuration == GameDuration.noTimer,
-                    onSelected: (selected) {
-                      if (selected && _selectedDuration != GameDuration.noTimer) {
-                        setState(() {
-                          _selectedDuration = GameDuration.noTimer;
-                        });
-                      }
-                    },
-                  ),
-                  ChoiceChip(
-                    key: ValueKey('min3'),
-                    label: Text('3 ${AppLocalizations.get('minutes')}'),
-                    selected: _selectedDuration == GameDuration.min3,
-                    onSelected: (selected) {
-                      if (selected && _selectedDuration != GameDuration.min3) {
-                        setState(() {
-                          _selectedDuration = GameDuration.min3;
-                        });
-                      }
-                    },
-                  ),
-                  ChoiceChip(
-                    key: ValueKey('min5'),
-                    label: Text('5 ${AppLocalizations.get('minutes')}'),
-                    selected: _selectedDuration == GameDuration.min5,
-                    onSelected: (selected) {
-                      if (selected && _selectedDuration != GameDuration.min5) {
-                        setState(() {
-                          _selectedDuration = GameDuration.min5;
-                        });
-                      }
-                    },
-                  ),
-                  ChoiceChip(
-                    key: ValueKey('min10'),
-                    label: Text('10 ${AppLocalizations.get('minutes')}'),
-                    selected: _selectedDuration == GameDuration.min10,
-                    onSelected: (selected) {
-                      if (selected && _selectedDuration != GameDuration.min10) {
-                        setState(() {
-                          _selectedDuration = GameDuration.min10;
-                        });
-                      }
-                    },
-                  ),
-                  ChoiceChip(
-                    key: ValueKey('min15'),
-                    label: Text('15 ${AppLocalizations.get('minutes')}'),
-                    selected: _selectedDuration == GameDuration.min15,
-                    onSelected: (selected) {
-                      if (selected && _selectedDuration != GameDuration.min15) {
-                        setState(() {
-                          _selectedDuration = GameDuration.min15;
-                        });
-                      }
-                    },
-                  ),
-                ],
+              RepaintBoundary(
+                child: Column(
+                  children: [
+                    Text(
+                      AppLocalizations.get('selectTime'),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium?.copyWith(fontSize: 32),
+                    ),
+                    const SizedBox(height: 20),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        ChoiceChip(
+                          key: ValueKey('noTimer'),
+                          label: Text(AppLocalizations.get('noTimer')),
+                          selected: _selectedDuration == GameDuration.noTimer,
+                          selectedColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                          onSelected: (selected) {
+                            if (selected && _selectedDuration != GameDuration.noTimer) {
+                              setState(() {
+                                _selectedDuration = GameDuration.noTimer;
+                              });
+                            }
+                          },
+                        ),
+                        ChoiceChip(
+                          key: ValueKey('min3'),
+                          label: Text('3 ${AppLocalizations.get('minutes')}'),
+                          selected: _selectedDuration == GameDuration.min3,
+                          selectedColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                          onSelected: (selected) {
+                            if (selected && _selectedDuration != GameDuration.min3) {
+                              setState(() {
+                                _selectedDuration = GameDuration.min3;
+                              });
+                            }
+                          },
+                        ),
+                        ChoiceChip(
+                          key: ValueKey('min5'),
+                          label: Text('5 ${AppLocalizations.get('minutes')}'),
+                          selected: _selectedDuration == GameDuration.min5,
+                          selectedColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                          onSelected: (selected) {
+                            if (selected && _selectedDuration != GameDuration.min5) {
+                              setState(() {
+                                _selectedDuration = GameDuration.min5;
+                              });
+                            }
+                          },
+                        ),
+                        ChoiceChip(
+                          key: ValueKey('min10'),
+                          label: Text('10 ${AppLocalizations.get('minutes')}'),
+                          selected: _selectedDuration == GameDuration.min10,
+                          selectedColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                          onSelected: (selected) {
+                            if (selected && _selectedDuration != GameDuration.min10) {
+                              setState(() {
+                                _selectedDuration = GameDuration.min10;
+                              });
+                            }
+                          },
+                        ),
+                        ChoiceChip(
+                          key: ValueKey('min15'),
+                          label: Text('15 ${AppLocalizations.get('minutes')}'),
+                          selected: _selectedDuration == GameDuration.min15,
+                          selectedColor: Theme.of(context).primaryColor.withOpacity(0.3),
+                          onSelected: (selected) {
+                            if (selected && _selectedDuration != GameDuration.min15) {
+                              setState(() {
+                                _selectedDuration = GameDuration.min15;
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 50),

@@ -104,33 +104,15 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget>
   }
 
   Future<void> _initializeAI() async {
-    // Всегда создаем fallback AI на случай проблем со Stockfish
+    // Используем только простой рандомный AI (Stockfish отключен по запросу)
     _fallbackAI = ChessAI();
-
-    try {
-      _stockfishAI = ChessAIStockfishNew();
-      await _stockfishAI!.initialize().timeout(
-        Duration(seconds: 3),
-        onTimeout: () {
-          print('⚠ Stockfish timeout при инициализации');
-          throw TimeoutException('Stockfish initialization timeout');
-        },
-      );
-      if (mounted) {
-        setState(() {
-          _useStockfish = true;
-        });
-      }
-      print('✓ Stockfish инициализирован успешно');
-    } catch (e) {
-      print('⚠ Stockfish недоступен, используем резервный AI: $e');
-      _stockfishAI = null;
-      if (mounted) {
-        setState(() {
-          _useStockfish = false;
-        });
-      }
+    _stockfishAI = null;
+    if (mounted) {
+      setState(() {
+        _useStockfish = false;
+      });
     }
+    print('✓ Простой рандомный AI инициализирован (Stockfish отключен)');
   }
 
   @override
