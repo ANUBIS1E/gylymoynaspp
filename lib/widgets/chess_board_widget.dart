@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 // УДАЛЕНО: import 'package:flutter_svg/flutter_svg.dart';
 import '../games/chess_ai.dart'; // Резервный быстрый ИИ
-import '../games/chess_ai_stockfish_new.dart'; // Профессиональный Stockfish ИИ
+import '../games/chess_ai_stockfish_new.dart'; // Профессиональный Stockfish ІІ
 import '../games/chess_logic.dart' as chess_logic;
 import 'package:chess/chess.dart' as chess;
 import '../screens/game_setup_screen.dart';
@@ -91,26 +92,39 @@ class _ChessBoardWidgetState extends State<ChessBoardWidget>
     );
 
     if (widget.gameMode == GameMode.pve) {
-      _initializeAI();
-      if (widget.playerColor == chess.Color.BLACK &&
-          widget.game.game.turn == chess.Color.WHITE) {
-        _triggerAiMove();
-      }
+      _initializeAI().then((_) {
+        // AI инициализирован, можем запускать первый ход если нужно
+        if (mounted &&
+            widget.playerColor == chess.Color.BLACK &&
+            widget.game.game.turn == chess.Color.WHITE) {
+          _triggerAiMove();
+        }
+      });
     }
   }
 
   Future<void> _initializeAI() async {
+    // Всегда создаем fallback AI на случай проблем со Stockfish
+    _fallbackAI = ChessAI();
+
     try {
       _stockfishAI = ChessAIStockfishNew();
-      await _stockfishAI!.initialize();
+      await _stockfishAI!.initialize().timeout(
+        Duration(seconds: 3),
+        onTimeout: () {
+          print('⚠ Stockfish timeout при инициализации');
+          throw TimeoutException('Stockfish initialization timeout');
+        },
+      );
       if (mounted) {
         setState(() {
           _useStockfish = true;
         });
       }
+      print('✓ Stockfish инициализирован успешно');
     } catch (e) {
       print('⚠ Stockfish недоступен, используем резервный AI: $e');
-      _fallbackAI = ChessAI();
+      _stockfishAI = null;
       if (mounted) {
         setState(() {
           _useStockfish = false;
